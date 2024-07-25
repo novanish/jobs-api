@@ -4,6 +4,8 @@ require("express-async-errors");
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
+const swaggerUI = require("swagger-ui-express");
+const YAML = require("yamljs");
 const { rateLimit } = require("express-rate-limit");
 
 const connectDB = require("./db/connect");
@@ -21,12 +23,14 @@ const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100,
 });
+const swaggerDocument = YAML.load("./swagger.yaml");
 
 app.use(limiter);
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
+app.use("/", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 app.use("/api/v1/jobs", authMiddleware, jobsRouter);
 app.use("/api/v1/auth", authRouter);
 
