@@ -31,9 +31,9 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-app.use("/", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 app.use("/api/v1/jobs", authMiddleware, jobsRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use(notFound);
 app.use(errorHandler);
